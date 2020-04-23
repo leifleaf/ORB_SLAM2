@@ -1,0 +1,7 @@
+roscore
+
+rosrun ORB_SLAM2 RGBD /home/xcc/catkin_ws/ORB_SLAM2/Vocabulary/ORBvoc.txt /home/xcc/catkin_ws/ORB_SLAM2/Examples/ROS/ORB_SLAM2/AsusD435.yaml
+
+roslaunch realsense2_camera rs_rgbd.launch
+
+

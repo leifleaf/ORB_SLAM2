@@ -1,5 +1,17 @@
 cmake_minimum_required(VERSION 2.4.6)
+
+
 include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
+
+
+MESSAGE(STATUS "hhh OpenCV_DIR: " ${OpenCV_DIR})
+find_package(OpenCV 3.0 QUIET)
+if(NOT OpenCV_FOUND)
+   find_package(OpenCV 2.4.3 QUIET)
+   if(NOT OpenCV_FOUND)
+      message(FATAL_ERROR "OpenCV > 2.4.3 not found.")
+   endif()
+endif()
 
 rosbuild_init()
 
@@ -30,13 +42,7 @@ endif()
 
 LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../../../cmake_modules)
 
-find_package(OpenCV 3.0 QUIET)
-if(NOT OpenCV_FOUND)
-   find_package(OpenCV 2.4.3 QUIET)
-   if(NOT OpenCV_FOUND)
-      message(FATAL_ERROR "OpenCV > 2.4.3 not found.")
-   endif()
-endif()
+
 
 find_package(Eigen3 3.1.0 REQUIRED)
 find_package(Pangolin REQUIRED)
@@ -48,13 +54,17 @@ ${PROJECT_SOURCE_DIR}/../../../include
 ${Pangolin_INCLUDE_DIRS}
 )
 
+MESSAGE(STATUS "hhh OpenCV_LIBS: " ${OpenCV_INCLUDE_DIRS})
+
 set(LIBS 
+/usr/lib/x86_64-linux-gnu/libtiff.so
 ${OpenCV_LIBS} 
 ${EIGEN3_LIBS}
 ${Pangolin_LIBRARIES}
 ${PROJECT_SOURCE_DIR}/../../../Thirdparty/DBoW2/lib/libDBoW2.so
 ${PROJECT_SOURCE_DIR}/../../../Thirdparty/g2o/lib/libg2o.so
 ${PROJECT_SOURCE_DIR}/../../../lib/libORB_SLAM2.so
+
 )
 
 # Node for monocular camera
@@ -94,4 +104,9 @@ src/ros_rgbd.cc
 target_link_libraries(RGBD
 ${LIBS}
 )
+
+
+target_link_libraries(Stereo boost_system boost_filesystem)  
+target_link_libraries(RGBD boost_system boost_filesystem) 
+
 
